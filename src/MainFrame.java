@@ -1,6 +1,6 @@
 
-import com.sun.corba.se.impl.protocol.giopmsgheaders.Message;
 import java.awt.Color;
+import static java.lang.Character.isDigit;
 import javax.swing.JOptionPane;
 
 public class MainFrame extends javax.swing.JFrame {
@@ -118,11 +118,12 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void CalcularActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CalcularActionPerformed
         // TODO add your handling code here:
-        if ("Introduzca el dato".equals(Dato.getText())) {
+            String texto = analizaString(Dato.getText());
+        if ("Introduzca el dato".equals(texto)) {
             Dato.setBackground(Color.RED);
             Dato.setForeground(Color.BLACK);
         } else {
-            Double Cel = Double.valueOf(Dato.getText());
+            Double Cel = Double.valueOf(texto);
             if (Cel < -273.15) {
                 JOptionPane.showMessageDialog(null, "Temperatura por debajo del cero absoluto");
                 Dato.setText("");
@@ -198,4 +199,32 @@ public class MainFrame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     // End of variables declaration//GEN-END:variables
+
+    private String analizaString(String text) {
+        boolean punto = true;
+        boolean menos = true;
+        for (int i = 0; i < text.length(); i++) {
+            if(!isDigit(text.charAt(i))){
+                switch(text.charAt(i)){
+                    case '.':
+                        if(punto){
+                            punto = false;
+                        }else{
+                            return "Introduzca el dato";
+                        }
+                        break;
+                    case '-':
+                        if(menos && i == 0){
+                            menos = false;
+                        }else{
+                            return "Introduzca el dato";
+                        }
+                        break;
+                    default:
+                        return "Introduzca el dato";
+                }
+            }
+        }
+        return text;
+    }
 }
